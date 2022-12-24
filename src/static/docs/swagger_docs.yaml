@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: Person API
+  description: This is a simple people API
+  contact:
+    email: abominablesnowmanxo@gmail.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+
+servers:
+  - url: /api/v1
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+        age:
+          type: integer
+        bio:
+          type: string
+      required:
+        - firstname
+        - lastname
+        - email
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+
+  parameters:
+    idParam:
+      in: path
+      name: id
+      required: true
+      description: Person ID
+      schema:
+        type: integer
+
+  requestBodies:
+    PersonBody:
+      description: A JSON object containing person information
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Person'
+          example:
+            firstname: John
+            lastname: Macclane
+            email: yohoho@nakatomi.com
+            age: 50
+            bio: Drinker
+
+  responses:
+    PersonCreated:
+      description: Person created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Person'
+          example:
+            id: 43
+            firstname: John
+            lastname: Macclane
+            email: yohoho@nakatomi.com
+            age: 50
+            bio: Drinker
+    NotFound:
+      description: Person not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+paths:
+  /persons:
+    get:
+      tags:
+        - Persons
+      summary: Get all persons
+      responses:
+        '200':
+          description: OK
+
+    post:
+      tags:
+        - Persons
+      summary: Create a new person
+      requestBody:
+        $ref: '#/components/requestBodies/PersonBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/BadRequest'
+
+  /persons/{id}:
+    get:
+      summary: Get a person by ID
+      tags:
+        - Persons
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Persons
+      summary: Update a person by ID
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      requestBody:
+        $ref: '#/components/requestBodies/PersonBody'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '400':
+          description: Bad request
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Persons
+      summary: Delete a person by ID
+      parameters:
+        - $ref: '#/components/parameters/idParam'
+      responses:
+        '204':
+          description: No content
+        '404':
+          description: Not Found
+          $ref: '#/components/responses/NotFound'
