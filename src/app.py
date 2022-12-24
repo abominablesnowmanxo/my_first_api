@@ -2,9 +2,9 @@ import os
 
 from flask import Flask
 
-from src.persons import persons
-from src.database import db
-from src.swagger import swagger_blueprint
+from persons import persons
+from database import db
+from swagger import swagger_blueprint
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))

@@ -1,10 +1,10 @@
 from flask import Blueprint, request
 
-from src.http_status_codes import (
+from http_status_codes import (
     HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND
 )
-from src.database import Person, db
+from database import Person, db
 
 
 persons = Blueprint('persons', __name__, url_prefix='/api/v1/')
